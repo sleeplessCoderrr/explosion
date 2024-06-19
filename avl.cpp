@@ -146,6 +146,27 @@ Data* deleteData(Data* temp, char staffName[], int expYear) {
     return temp;
 }
 
+Data* findNodeByName(Data* root, char staffName[]) {
+    if (root == NULL) return NULL;
+    
+    if (strcmp(root->staffName, staffName) == 0) {
+        return root;
+    }
+
+    Data* leftSearch = findNodeByName(root->left, staffName);
+    if (leftSearch != NULL) return leftSearch;
+
+    return findNodeByName(root->right, staffName);
+}
+
+Data* deleteDataByName(Data* root, char staffName[]) {
+    Data* targetNode = findNodeByName(root, staffName);
+    if (targetNode != NULL) {
+        root = deleteData(root, targetNode->staffName, targetNode->expYear);
+    }
+    return root;
+}
+
 void inOrderWithLabels(Data* root, int depth, int parentLabel) {
     if (root) {
         inOrderWithLabels(root->left, depth + 1, parentLabel);
@@ -180,7 +201,7 @@ int main() {
     root = insertData(root, "Miruzen", 2);
     root = insertData(root, "Jiraya", 24);
     root = insertData(root, "Lee", 3);
-    root = deleteData(root, "Sasuke", 5);
+    root = deleteDataByName(root, "Madara");
     inOrderWithLabels(root, 0, 0);
 
     return 0;
