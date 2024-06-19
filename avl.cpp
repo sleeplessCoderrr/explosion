@@ -167,25 +167,24 @@ Data* deleteDataByName(Data* root, char staffName[]) {
     return root;
 }
 
-void inOrderWithLabels(Data* root, int depth, int parentLabel) {
-    if (root) {
-        inOrderWithLabels(root->left, depth + 1, parentLabel);
+void inOrderWithLabels(Data* cur, Data* root) {
+    if(cur){
+        inOrderWithLabels(cur->left, root);
 
-        if (depth == 0) {
-            printf("Research Leader : %d Years Exp %s\n", root->expYear, root->staffName);
-        } else if (depth == 1) {
-            if (parentLabel == 0) {
-                printf("Deputy Head 1 : %d Years Exp %s\n", root->expYear, root->staffName);
-            } else {
-                printf("Deputy Head 2 : %d Years Exp %s\n", root->expYear, root->staffName);
-            }
-        } else if (depth == 2) {
-            printf("Officer : %d Years Exp %s\n", root->expYear, root->staffName);
-        } else {
-            printf("Staff : %d Years Exp %s\n", root->expYear, root->staffName);
-        }
+        if(cur->height == root->height){
+			printf("Leader : %d %s\n", cur->expYear, cur->staffName);
+		}else if(cur->height == root->height - 1 && cur == root->left){
+			printf("Deputy head 1 : %d %s\n", cur->expYear, cur->staffName);
+		}else if(cur->height == root->height - 1 && cur == root->right){
+			printf("Deputy head 2 : %d %s\n", cur->expYear, cur->staffName);
+		}else if(cur->height > 1 && cur->height < root->height - 1){
+			printf("Officer : %d %s\n", cur->expYear, cur->staffName);
+		}else if(cur->height == 1){
+			printf("Staff : %d %s\n", cur->expYear, cur->staffName);
+		}
 
-        inOrderWithLabels(root->right, depth + 1, depth == 0 ? 1 : parentLabel);
+
+        inOrderWithLabels(cur->left, root);
     }
 }
 
@@ -202,7 +201,7 @@ int main() {
     root = insertData(root, "Jiraya", 24);
     root = insertData(root, "Lee", 3);
     root = deleteDataByName(root, "Madara");
-    inOrderWithLabels(root, 0, 0);
+    inOrderWithLabels(root, root);
 
     return 0;
 }
